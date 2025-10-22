@@ -1,6 +1,6 @@
 # Run Gen.java
 
 ```
-javac Gen.java
-java --add-opens java.base/java.util=ALL-UNNAMED -cp . Gen
+javac -d /mnt/ram/BreakingLCG Gen.java
+java --add-opens java.base/java.util=ALL-UNNAMED -cp /mnt/ram/BreakingLCG Gen
 ``
