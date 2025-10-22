@@ -2,12 +2,6 @@ import java.util.Random;
 import java.lang.reflect.Field;
 
 public class Gen extends Random {
-    public long next48() {
-        // access protected next(int bits)
-        final long MASK = (1L << 48) - 1;
-        return ((long) super.next(48)) & MASK;
-    }
-
     public void printProperties() throws Exception {
         System.out.println("Class: " + this.getClass().getName());
 
@@ -36,8 +30,10 @@ public class Gen extends Random {
         }
         System.out.println("Generating " + N + " 48-bit values from Random:");
         for (int i = 0; i < N; i++) {
-            final long value = rng.next48();
-            System.out.printf("0x%012x (%15d)%n", value, value);
+            final long value = rng.nextLong();
+            final long high = value >>> 32;
+            final long low  = value & 0xFFFF_FFFFL;
+            System.out.printf("%08X %08X%n", high, low);
         }
     }
 }
