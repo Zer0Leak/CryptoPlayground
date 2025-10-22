@@ -1,0 +1,61 @@
+{
+    "cmake.generator": "Ninja",
+    "cmake.configureOnOpen": true,
+
+    "cmake.useCMakePresets": "always",
+    // line below already set by presets
+    // "cmake.buildDirectory": "${workspaceFolder}/build/${buildType}",
+    "C_Cpp.default.compileCommands": "${workspaceFolder}/build/${buildType}/compile_commands.json",
+
+    // Keep the compile_commands.json exported by CMake
+    "cmake.exportCompileCommandsFile": true,
+
+    // ensure clang compilers (same as CLI)
+    "cmake.configureArgs": [
+        "-DCMAKE_C_COMPILER=clang",
+        "-DCMAKE_CXX_COMPILER=clang++"
+    ],
+
+    // 🔽 Build the active target before running it
+    // "cmake.buildBeforeRun": true,
+
+    // IntelliSense with clangd; keep cpptools only for debugging
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "C_Cpp.default.cppStandard": "c++23",
+
+    "python-envs.defaultEnvManager": "ms-python.python:system",
+    "python-envs.pythonProjects": [],
+
+    // auto target intro
+    "cmake.configureOnEdit": true,
+    "cmake.buildBeforeRun": true,
+
+    // indent
+    "editor.detectIndentation": false,
+    "[c]":   {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4
+    },
+    "[cpp]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4
+    },
+    // "editor.formatOnSave": true,
+
+    // clang format
+    "C_Cpp.formatting": "clangFormat",
+    "C_Cpp.clang_format_style": "file",
+    // If you use clangd extension instead of cpptools:
+    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
+
+
+    // Set max line length for formatting/word wrap
+    "editor.rulers": [120],
+
+    // Optional: control automatic wrapping
+    "editor.wordWrap": "off",          // or "wordWrapColumn"
+    "editor.wordWrapColumn": 120,
+
+    // For clang-format: enforce 120 chars
+    "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: LLVM, ColumnLimit: 120 }"
+}

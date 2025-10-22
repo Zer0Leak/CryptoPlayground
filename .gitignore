@@ -1,41 +1,214 @@
-# Prerequisites
-*.d
+# =========================
+# General
+# =========================
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.bak
+*.tmp
+*.log
+*.out
+*.pid
+*.seed
+*.old
 
-# Compiled Object files
-*.slo
-*.lo
+# Editor / OS junk
+# .vscode/
+.idea/
+*.iml
+*.sublime-*
+*.kate-swp
+*.directory
+*~
+
+# =========================
+# Build systems (C / C++ / CMake)
+# =========================
+# Compiled object files
 *.o
 *.obj
+*.lo
+*.slo
 
-# Precompiled Headers
+# Precompiled headers
 *.gch
 *.pch
 
-# Linker files
-*.ilk
-
-# Debugger Files
-*.pdb
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
+# Static / dynamic libs
 *.a
+*.la
 *.lib
+*.so
+*.so.*
+*.dll
+*.dylib
 
 # Executables
 *.exe
 *.out
 *.app
+*.i*86
+*.x86_64
+*.hex
 
-# debug information files
-*.dwo
+# CMake
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Testing/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps/
+build/
+build-*/
+out/
+bin/
+lib/
+
+# Ninja / Meson
+.ninja_deps
+.ninja_log
+meson-private/
+meson-build/
+compile_commands.json
+
+# ccache
+.ccache/
+
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.env/
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+pip-wheel-metadata/
+wheels/
+
+# PyInstaller
+*.spec
+
+# Unit test / coverage
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pyre/
+.pytype/
+mypy_cache/
+
+# =========================
+# Java
+# =========================
+# Compiled class files
+*.class
+
+# Package files
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Maven / Gradle
+target/
+build/
+out/
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+.gradle/
+build/
+.gradle-cache/
+dependency-reduced-pom.xml
+*.class
+*.log
+
+# Eclipse / IntelliJ
+*.classpath
+*.project
+*.settings/
+.classpath
+.project
+.settings/
+.idea/
+*.iml
+
+# =========================
+# Misc tools
+# =========================
+# Logs / temp
+logs/
+tmp/
+temp/
+
+# Coverage / analysis
+lcov.info
+*.gcda
+*.gcno
+*.gcov
+
+# =========================
+# Jupyter / notebooks (if Python)
+# =========================
+.ipynb_checkpoints
+*.ipynb_convert
+*.nbconvert.ipynb
+
+# =========================
+# Other useful ignores
+# =========================
+# VS Code local history
+.history/
+
+# Mac/Windows system
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Backup files
+*.bak
+*.orig
+*.rej
+
+# =========================
+# End of file
+# =========================
+
