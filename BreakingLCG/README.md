@@ -2,5 +2,5 @@
 
 ```
 javac Gen.java
-java Gen
+java --add-opens java.base/java.util=ALL-UNNAMED -cp . Gen
 ``

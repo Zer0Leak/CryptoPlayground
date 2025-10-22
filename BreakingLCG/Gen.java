@@ -31,7 +31,8 @@ public class Gen extends Random {
         try {
             rng.printProperties();
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
+            System.out.println("Run with java --add-opens java.base/java.util=ALL-UNNAMED -cp . Gen");
         }
         System.out.println("Generating " + N + " 48-bit values from Random:");
         for (int i = 0; i < N; i++) {
