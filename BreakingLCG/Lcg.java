@@ -38,7 +38,8 @@ public final class Lcg {
     }
 
     public static void main(String[] args) {
-        final int N = 5;
+        final String delimiter = "################################";
+        final int N = 6;
         final long SEED = 1L;
         final boolean OutputOnly32bits = true;
         final long OutputOnly32bitsShift = OutputOnly32bits ? (48L - 32L) : 0L;
@@ -47,10 +48,15 @@ public final class Lcg {
 
         rng.printProperties();
         System.out.println("Generating " + N + " 48-bit values from manual LCG:");
+        System.out.println(delimiter);
 
         for (int i = 0; i < N; i++) {
             long high = rng.next48() >>> OutputOnly32bitsShift;
             long low = rng.next48() >>> OutputOnly32bitsShift;
+
+            if (i == N/2) {
+                System.out.println(delimiter);
+            }
 
             if (OutputOnly32bits) {
                 System.out.printf("%08X %08X%n", high, low);

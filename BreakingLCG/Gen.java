@@ -15,7 +15,8 @@ public class Gen extends Random {
     }
 
     public static void main(String[] args) {
-        final int N = 5;
+        final String delimiter = "################################";
+        final int N = 6;
         final Integer SEED = 1;
         Gen rng = new Gen();
 
@@ -29,10 +30,16 @@ public class Gen extends Random {
             System.out.println("Run with java --add-opens java.base/java.util=ALL-UNNAMED -cp . Gen");
         }
         System.out.println("Generating " + N + " 48-bit values from Random:");
+        System.out.println(delimiter);
         for (int i = 0; i < N; i++) {
             final long value = rng.nextLong();
             final long high = value >>> 32;
             final long low  = value & 0xFFFF_FFFFL;
+
+            if (i == N/2) {
+                System.out.println(delimiter);
+            }
+
             System.out.printf("%08X %08X%n", high, low);
         }
     }
