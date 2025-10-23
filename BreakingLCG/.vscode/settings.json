@@ -12,27 +12,24 @@
 
     // ensure clang compilers (same as CLI)
     "cmake.configureArgs": [
-        "-DCMAKE_C_COMPILER=clang",
-        "-DCMAKE_CXX_COMPILER=clang++"
+        "-DCMAKE_C_COMPILER=gcc",
+        "-DCMAKE_CXX_COMPILER=g++"
     ],
 
     // 🔽 Build the active target before running it
     // "cmake.buildBeforeRun": true,
 
-    // Use clangd for IntelliSense, disable cpptools analysis engine
-    "C_Cpp.intelliSenseEngine": "disabled",
+    // Use cpptools IntelliSense
+    "C_Cpp.intelliSenseEngine": "default",
     "C_Cpp.default.cppStandard": "c++23",
 
     // Let CMake Tools feed include paths and defines to cpptools (for debugging)
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
-    "clangd.arguments": [
-        "--compile-commands-dir=/mnt/ram/BreakingLCG/build/Active",
-        "--query-driver=/usr/bin/clang++,/usr/bin/clang-*"
-    ],
+    // clangd settings removed; using cpptools
 
-    // Ensure fallback compiler & IntelliSense mode (mainly affects debugging, not clangd)
-    "C_Cpp.default.compilerPath": "/usr/bin/clang++",
-    "C_Cpp.default.intelliSenseMode": "linux-clang-x64",
+    // Compiler for IntelliSense (cpptools)
+    "C_Cpp.default.compilerPath": "/usr/bin/g++",
+    "C_Cpp.default.intelliSenseMode": "linux-gcc-x64",
 
 
     "python-envs.defaultEnvManager": "ms-python.python:system",
@@ -57,8 +54,7 @@
     // clang format
     "C_Cpp.formatting": "clangFormat",
     "C_Cpp.clang_format_style": "file",
-    // If you use clangd extension instead of cpptools:
-    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
+    // Default formatter: use cpptools/clang-format
 
 
     // Set max line length for formatting/word wrap

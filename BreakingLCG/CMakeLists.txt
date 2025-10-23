@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.22)
 
 # ---------- (optional) force Clang: do this BEFORE project() ----------
 if(NOT DEFINED CMAKE_C_COMPILER AND NOT DEFINED CMAKE_CXX_COMPILER)
-  set(CMAKE_C_COMPILER clang)
-  set(CMAKE_CXX_COMPILER clang++)
+  set(CMAKE_C_COMPILER gcc)
+  set(CMAKE_CXX_COMPILER g++)
 endif()
 
 # ---------- single place to rename your target ----------
@@ -179,11 +179,11 @@ add_custom_command(
 # export BUILD_FOLDER=/mnt/ram/BreakingLCG/build  # to build in RAM FS
 #
 # For Debug
-# cmake -S . -B "$BUILD_FOLDER/Debug" -G Ninja -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++
+# cmake -S . -B "$BUILD_FOLDER/Debug" -G Ninja -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
 # cmake --build "$BUILD_FOLDER/Debug"
 #
 # For Release
-# cmake -S . -B "${BUILD_FOLDER}/Release" -G Ninja -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Release
+# cmake -S . -B "${BUILD_FOLDER}/Release" -G Ninja -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_BUILD_TYPE=Release
 # cmake --build "${BUILD_FOLDER}/Release"
 #
 # Or use Presets (defined in CMakePresets.json):
