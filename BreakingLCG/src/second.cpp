@@ -1,4 +1,0 @@
-
-void second(void) {
-    return;
-}

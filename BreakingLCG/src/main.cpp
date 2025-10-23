@@ -3,9 +3,12 @@
 #include <format>
 #include <fstream>
 #include <iostream>
+#include <ostream>
 #include <sstream>
 #include <string>
 #include <vector>
+
+#include "brute_force.h"
 
 std::vector<uint64_t> readHexValues(const std::string &filename) {
     std::ifstream file(filename);
@@ -39,6 +42,10 @@ int main(int argc, char *argv[]) {
         std::cout << std::format("{:08X} {:08X}\n", static_cast<uint32_t>(values[i]),
                                  static_cast<uint32_t>(values[i + 1]));
     }
+    
+    uint64_t seed = bruteForceSeed(values);
+
+    std::cout << std::format("Found seed: {:012X}\n", seed);
 
     return 0;
 }
