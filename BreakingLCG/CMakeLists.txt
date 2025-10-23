@@ -11,22 +11,6 @@ set(TARGET_NAME breaking_lcg)
 
 project(${TARGET_NAME} LANGUAGES CXX)
 
-# Prefer mold (faster), fall back to lld
-find_program(MOLD mold)
-if(MOLD)
-  add_link_options(-fuse-ld=mold)
-else()
-  add_link_options(-fuse-ld=lld)
-endif()
-
-# ---------- compiler debug options ----------
-if(CMAKE_BUILD_TYPE MATCHES "Debug")
-  # -Og: keep debug-friendly optimizations
-  # -g: generate debug symbols
-  # -fno-omit-frame-pointer: better stack traces in LLDB
-  add_compile_options(-Og -g -fno-omit-frame-pointer)
-endif()
-
 # ===== Global defaults =====
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build." FORCE)
@@ -51,10 +35,36 @@ add_executable(${TARGET_NAME}
   src/second.cpp
 )
 
+target_compile_options(${TARGET_NAME} PRIVATE
+  "$<$<CONFIG:Debug>:-Og;-g;-fno-omit-frame-pointer>"
+)
+
+if(UNIX AND NOT APPLE AND CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
+  find_program(MOLD_LINKER mold)
+  if(MOLD_LINKER)
+    target_link_options(${TARGET_NAME} PRIVATE -fuse-ld=mold)
+    message(STATUS "Using mold linker")
+  else()
+    find_program(LLD_LINKER lld)
+    if(LLD_LINKER)
+      target_link_options(${TARGET_NAME} PRIVATE -fuse-ld=lld)
+      message(STATUS "Using lld linker")
+    else()
+      message(STATUS "Using default linker")
+    endif()
+  endif()
+endif()
+
+
 target_include_directories(${TARGET_NAME} PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
-target_compile_features(${TARGET_NAME} PRIVATE cxx_std_23)
+
+set_target_properties(${TARGET_NAME} PROPERTIES
+  CXX_STANDARD 23
+  CXX_STANDARD_REQUIRED YES
+  CXX_EXTENSIONS NO
+)
 
 # ===== Warnings =====
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
@@ -151,12 +161,22 @@ if(ENABLE_OPENMP)
   target_link_libraries(${TARGET_NAME} PRIVATE OpenMP::OpenMP_CXX)
 endif()
 
+# ===== Post-build: create/update symbolic link to the latest build =====
+add_custom_command(
+    TARGET ${TARGET_NAME}
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E echo "Updating 'Active' symlink → ${CMAKE_BUILD_TYPE}"
+    COMMAND ${CMAKE_COMMAND} -E remove -f "${CMAKE_BINARY_DIR}/../Active"
+    COMMAND ${CMAKE_COMMAND} -E create_symlink "${CMAKE_BINARY_DIR}" "${CMAKE_BINARY_DIR}/../Active"
+)
+
+
 # ===== Usage hint =====
 #
 # cmake --preset ram-debug  -DENABLE_ARRAYFIRE=OFF
 # cmake --preset ram-release -DENABLE_DLIB=ON
 #
-# export BUILD_FOLDER=build
+# export BUILD_FOLDER=/mnt/ram/BreakingLCG/build  # to build in RAM FS
 #
 # For Debug
 # cmake -S . -B "$BUILD_FOLDER/Debug" -G Ninja -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++

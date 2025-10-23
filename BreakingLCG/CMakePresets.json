@@ -9,9 +9,9 @@
   "configurePresets": [
     {
       "name": "ram-debug",
-      "displayName": "Debug (RAM ${sourceDir}/build/Debug)",
+      "displayName": "Debug (RAM /mnt/ram/BreakingLCG/build/Debug)",
       "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/Debug",
+      "binaryDir": "/mnt/ram/BreakingLCG/build/Debug",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_C_COMPILER": "clang",
@@ -21,9 +21,9 @@
     },
     {
       "name": "ram-release",
-      "displayName": "Release (RAM ${sourceDir}/build/Release)",
+      "displayName": "Release (RAM /mnt/ram/BreakingLCG/build/Release)",
       "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/Release",
+      "binaryDir": "/mnt/ram/BreakingLCG/build/Release",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
         "CMAKE_C_COMPILER": "clang",
