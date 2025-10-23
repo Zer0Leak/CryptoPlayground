@@ -2,25 +2,15 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug (gdb/cpptools) - Active CMake Target",
-      "type": "cppdbg",
+      "name": "(lldb) Launch active CMake target",
+      "type": "lldb",
       "request": "launch",
       "program": "${command:cmake.launchTargetPath}",
       "cwd": "${command:cmake.launchTargetDirectory}",
       "args": [],
-      "stopAtEntry": false,
+      "stopOnEntry": false,
       "preLaunchTask": "CMake: build",
-      "MIMode": "gdb",
-      "miDebuggerPath": "/usr/bin/gdb",
-      "environment": [],
-      "externalConsole": false,
-      "setupCommands": [
-        {
-          "description": "Enable pretty-printing for gdb",
-          "text": "-enable-pretty-printing",
-          "ignoreFailures": true
-        }
-      ]
+      "console": "integratedTerminal"
     }
   ]
 }
