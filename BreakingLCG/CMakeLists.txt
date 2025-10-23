@@ -33,6 +33,7 @@ option(ENABLE_FMT             "Use fmt formatting library"            OFF)
 add_executable(${TARGET_NAME}
   src/main.cpp
   src/brute_force.cpp
+  src/EmulateJavaRandom.cpp
 )
 
 target_compile_options(${TARGET_NAME} PRIVATE

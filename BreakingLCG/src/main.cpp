@@ -3,11 +3,12 @@
 #include <format>
 #include <fstream>
 #include <iostream>
-#include <ostream>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
+#include "EmulateJavaRandom.h"
 #include "brute_force.h"
 
 std::vector<uint64_t> readHexValues(const std::string &filename) {
@@ -33,7 +34,64 @@ std::vector<uint64_t> readHexValues(const std::string &filename) {
     return values;
 }
 
+void testOurLcg() {
+    const std::string delimiter = "################################";
+    const int N = 6;
+    const bool OutputOnly32bits = true;
+    const std::uint64_t shift = OutputOnly32bits ? 16ULL : 0ULL;
+
+    EmulateJavaRandom rng(1);
+
+    std::cout << "Generating " << N << " 48-bit values from EmulateJavaRandom:" << '\n';
+    std::cout << delimiter << '\n';
+
+    for (int i = 0; i < N; ++i) {
+        std::uint32_t high = static_cast<std::uint32_t>(rng.next48() >> shift);
+        std::uint32_t low  = static_cast<std::uint32_t>(rng.next48() >> shift);
+
+        if (i == N/2) {
+            std::cout << delimiter << '\n';
+        }
+
+        std::cout << std::format("{:08X} {:08X}\n", high, low);
+    }
+}
+
+// Given a recovered internal 48-bit LCG state (as returned by bruteForceSeed),
+// seed EmulateJavaRandom equivalently and print 6 values (2 per line) like Lcg.java
+void testWithRecoveredSeed(std::uint64_t internal48Seed) {
+    const std::string delimiter = "################################";
+    const int N = 6;
+    const std::uint64_t shift = 16ULL; // top 32 bits from 48-bit state
+
+    // Convert internal state S_internal to a public seed s such that
+    // setSeed(s) produces S_internal:  S_internal = (s ^ MULTIPLIER) & MASK
+    EmulateJavaRandom rng;
+    rng.setRawSeed(internal48Seed);
+
+    std::cout << "Pairs from recovered seed (EmulateJavaRandom):" << '\n';
+    std::cout << delimiter << '\n';
+    for (int i = 0; i < N/2; ++i) {
+        std::uint32_t high = static_cast<std::uint32_t>(rng.next48() >> shift);
+        std::uint32_t low  = static_cast<std::uint32_t>(rng.next48() >> shift);
+        std::cout << std::format("{:08X} {:08X}\n", high, low);
+    }
+}
+
+void printInputValues(std::vector<uint64_t> &values) {
+    const std::string delimiter = "################################";
+
+    std::cout << "Input values:" << '\n';
+    std::cout << delimiter << '\n';
+    for (size_t i = 0; i < values.size(); i += 2) {
+        std::cout << std::format("{:08X} {:08X}\n", static_cast<uint32_t>(values[i]),
+                                 static_cast<uint32_t>(values[i + 1]));
+    }
+}
 int main(int argc, char *argv[]) {
+    // Quick self-check of our Java-compatible LCG
+    // testOurLcg();
+
     std::string file_path = "/mnt/ram/BreakingLCG/lcg.txt";
     if (argc == 2) {
         file_path = argv[1];
@@ -42,14 +100,11 @@ int main(int argc, char *argv[]) {
     auto values = readHexValues(file_path);
 
     // Print two values side-by-side (pair i from first half with i from second half)
-    for (size_t i = 0; i < values.size(); i += 2) {
-        std::cout << std::format("{:08X} {:08X}\n", static_cast<uint32_t>(values[i]),
-                                 static_cast<uint32_t>(values[i + 1]));
-    }
-    
-    uint64_t seed = bruteForceSeed(values);
+    printInputValues(values);
 
-    std::cout << std::format("Found seed: {:012X}\n", seed);
+    uint64_t seed = bruteForceSeed(values);
+    std::cout << std::format("Found internal 48-bit seed: {:012X}\n", seed);
+    testWithRecoveredSeed(seed);
 
     return 0;
 }
