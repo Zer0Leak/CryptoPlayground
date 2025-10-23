@@ -1,3 +1,14 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+//
+// File: main.cpp
+// Author: Edgard Lima (Zer0Leak)
+// GitHub: https://github.com/Zer0Leak
+//
+// Copyright (c) 2025 Edgard Lima
+//
+// This software is licensed under the terms of the
+// GNU Lesser General Public License version 3 or later.
+// See: https://www.gnu.org/licenses/lgpl-3.0.html
 
 #include <cstdint>
 #include <format>
@@ -47,9 +58,9 @@ void testOurLcg() {
 
     for (int i = 0; i < N; ++i) {
         std::uint32_t high = static_cast<std::uint32_t>(rng.next48() >> shift);
-        std::uint32_t low  = static_cast<std::uint32_t>(rng.next48() >> shift);
+        std::uint32_t low = static_cast<std::uint32_t>(rng.next48() >> shift);
 
-        if (i == N/2) {
+        if (i == N / 2) {
             std::cout << delimiter << '\n';
         }
 
@@ -71,9 +82,9 @@ void testWithRecoveredSeed(std::uint64_t internal48Seed) {
 
     std::cout << "Pairs from recovered seed (EmulateJavaRandom):" << '\n';
     std::cout << delimiter << '\n';
-    for (int i = 0; i < N/2; ++i) {
+    for (int i = 0; i < N / 2; ++i) {
         std::uint32_t high = static_cast<std::uint32_t>(rng.next48() >> shift);
-        std::uint32_t low  = static_cast<std::uint32_t>(rng.next48() >> shift);
+        std::uint32_t low = static_cast<std::uint32_t>(rng.next48() >> shift);
         std::cout << std::format("{:08X} {:08X}\n", high, low);
     }
 }
@@ -102,7 +113,7 @@ int main(int argc, char *argv[]) {
     // Print two values side-by-side (pair i from first half with i from second half)
     printInputValues(values);
 
-    uint64_t seed = bruteForceSeed(values);
+    uint64_t seed = calculateLcgSeedByBruteForce(values, [](uint64_t x) { return x; });
     std::cout << std::format("Found internal 48-bit seed: {:012X}\n", seed);
     testWithRecoveredSeed(seed);
 

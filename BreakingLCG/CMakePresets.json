@@ -1,50 +1,52 @@
 {
-  "version": 5,
-  "cmakeMinimumRequired": {
-    "major": 3,
-    "minor": 22,
-    "patch": 0
-  },
-
-  "configurePresets": [
-    {
-      "name": "ram-debug",
-      "displayName": "Debug (RAM /mnt/ram/BreakingLCG/build/Debug)",
-      "generator": "Ninja",
-      "binaryDir": "/mnt/ram/BreakingLCG/build/Debug",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_C_COMPILER": "clang",
-        "CMAKE_CXX_COMPILER": "clang++",
-        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
-      }
+    "version": 5,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 22,
+        "patch": 0
     },
-    {
-      "name": "ram-release",
-      "displayName": "Release (RAM /mnt/ram/BreakingLCG/build/Release)",
-      "generator": "Ninja",
-      "binaryDir": "/mnt/ram/BreakingLCG/build/Release",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_C_COMPILER": "clang",
-        "CMAKE_CXX_COMPILER": "clang++",
-        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
-      }
-    }
-  ],
-
-  "buildPresets": [
-    {
-      "name": "build-ram-debug",
-      "configurePreset": "ram-debug",
-      "targets": ["breaking_lcg"],
-      "jobs": 0
-    },
-    {
-      "name": "build-ram-release",
-      "configurePreset": "ram-release",
-      "targets": ["breaking_lcg"],
-      "jobs": 0
-    }
-  ]
+    "configurePresets": [
+        {
+            "name": "ram-debug",
+            "displayName": "Debug (RAM /mnt/ram/BreakingLCG/build/Debug)",
+            "generator": "Ninja",
+            "binaryDir": "/mnt/ram/BreakingLCG/build/Debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            }
+        },
+        {
+            "name": "ram-release",
+            "displayName": "Release (RAM /mnt/ram/BreakingLCG/build/Release)",
+            "generator": "Ninja",
+            "binaryDir": "/mnt/ram/BreakingLCG/build/Release",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "build-ram-debug",
+            "configurePreset": "ram-debug",
+            "targets": [
+                "breaking_lcg"
+            ],
+            "jobs": 0
+        },
+        {
+            "name": "build-ram-release",
+            "configurePreset": "ram-release",
+            "targets": [
+                "breaking_lcg"
+            ],
+            "jobs": 0
+        }
+    ]
 }
