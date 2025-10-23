@@ -57,6 +57,7 @@
     // clang format
     "C_Cpp.formatting": "clangFormat",
     "C_Cpp.clang_format_style": "file",
+    "editor.formatOnSave": true,
     // If you use clangd extension instead of cpptools:
     "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
 
