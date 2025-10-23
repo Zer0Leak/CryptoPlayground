@@ -15,6 +15,10 @@ std::vector<uint64_t> readHexValues(const std::string &filename) {
     std::vector<uint64_t> values;
     std::string line;
 
+    if (!file.is_open()) {
+        throw std::runtime_error("Could not open file: " + filename);
+    }
+
     // First pass: collect all pairs
     while (std::getline(file, line)) {
         std::istringstream iss(line);

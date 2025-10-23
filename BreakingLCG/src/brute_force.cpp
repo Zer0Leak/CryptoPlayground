@@ -19,8 +19,7 @@ uint64_t bruteForceSeed(const std::vector<uint64_t> &values) {
     uint64_t seed = 0;
 
     if (values.size() < 2) {
-        std::cerr << "Need at least one pair of values to brute force\n";
-        return -1;
+        throw std::invalid_argument("Need at least one pair of values to brute force the seed.");
     }
 
     uint64_t s0 = values[0];
