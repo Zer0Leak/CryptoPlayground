@@ -64,9 +64,9 @@ public final class ManualGen {
             if (emulateBallyMoneyHoney) {
                 // Emulate behavior of nextInt(rouletteSlots) on 48-bit state
                 // Not exactly the same. Do not treat bias when not power of 2.
-                first = first >> (48 - 31);
-                second  = second  >> (48 - 31);
-                third = third  >> (48 - 31);
+                first = first >>> (48 - 31);
+                second  = second  >>> (48 - 31);
+                third = third  >>> (48 - 31);
                 if ((rouletteSlots & (rouletteSlots - 1)) == 0) {  // is it power of 2?
                     // take top bits
                     first = (first * rouletteSlots) >>> 31;

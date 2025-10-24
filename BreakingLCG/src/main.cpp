@@ -23,6 +23,9 @@
 #include "EmulateJavaRandom.h"
 #include "brute_force.h"
 
+const auto emulateBallyMoneyHoney = true;
+const auto numRollCards = 32U;
+
 std::vector<uint64_t> readHexValues(const std::string &filename) {
     std::ifstream file(filename);
     std::vector<uint64_t> values;
@@ -59,15 +62,25 @@ void testOurLcg() {
     std::cout << delimiter << '\n';
 
     for (int i = 0; i < N; ++i) {
-        std::uint32_t first = static_cast<std::uint32_t>(rng.next48() >> shift);
-        std::uint32_t second = static_cast<std::uint32_t>(rng.next48() >> shift);
-        std::uint32_t third = static_cast<std::uint32_t>(rng.next48() >> shift);
+        std::uint32_t first, second, third;
 
         if (i == N / 2) {
             std::cout << delimiter << '\n';
         }
 
-        std::cout << std::format("{:08X} {:08X} {:08X}\n", first, second, third);
+        if (emulateBallyMoneyHoney) {
+            first = static_cast<std::uint32_t>(rng.nextInt(numRollCards));
+            second = static_cast<std::uint32_t>(rng.nextInt(numRollCards));
+            third = static_cast<std::uint32_t>(rng.nextInt(numRollCards));
+
+            std::cout << std::format("{:02X} {:02X} {:02X}\n", first, second, third);
+        } else {
+            first = static_cast<std::uint32_t>(rng.next48() >> shift);
+            second = static_cast<std::uint32_t>(rng.next48() >> shift);
+            third = static_cast<std::uint32_t>(rng.next48() >> shift);
+
+            std::cout << std::format("{:08X} {:08X} {:08X}\n", first, second, third);
+        }
     }
 }
 
@@ -86,10 +99,20 @@ void testWithRecoveredSeed(std::uint64_t internal48Seed) {
     std::cout << "Pairs from recovered seed (EmulateJavaRandom):" << '\n';
     std::cout << delimiter << '\n';
     for (int i = 0; i < N / 2; ++i) {
-        std::uint32_t first = static_cast<std::uint32_t>(rng.next48() >> shift);
-        std::uint32_t second = static_cast<std::uint32_t>(rng.next48() >> shift);
-        std::uint32_t third = static_cast<std::uint32_t>(rng.next48() >> shift);
-        std::cout << std::format("{:08X} {:08X} {:08X}\n", first, second, third);
+        std::uint32_t first, second, third;
+        if (emulateBallyMoneyHoney) {
+            first = static_cast<std::uint32_t>(rng.nextInt(numRollCards));
+            second = static_cast<std::uint32_t>(rng.nextInt(numRollCards));
+            third = static_cast<std::uint32_t>(rng.nextInt(numRollCards));
+
+            std::cout << std::format("{:02X} {:02X} {:02X}\n", first, second, third);
+        } else {
+            first = static_cast<std::uint32_t>(rng.next48() >> shift);
+            second = static_cast<std::uint32_t>(rng.next48() >> shift);
+            third = static_cast<std::uint32_t>(rng.next48() >> shift);
+
+            std::cout << std::format("{:08X} {:08X} {:08X}\n", first, second, third);
+        }
     }
 }
 
@@ -99,8 +122,20 @@ void printInputValues(std::vector<uint64_t> &values) {
     std::cout << "Input values:" << '\n';
     std::cout << delimiter << '\n';
     for (size_t i = 0; i < values.size(); i += 3) {
-        std::cout << std::format("{:08X} {:08X} {:08X}\n", static_cast<uint32_t>(values[i]),
-                                 static_cast<uint32_t>(values[i + 1]), static_cast<uint32_t>(values[i + 2]));
+        // clang-format off
+        auto [first, second, third] =
+            std::tuple{
+                static_cast<uint32_t>(values[i]),
+                static_cast<uint32_t>(values[i + 1]),
+                static_cast<uint32_t>(values[i + 2])
+            };
+        // clang-format on
+
+        if (emulateBallyMoneyHoney) {
+            std::cout << std::format("{:02X} {:02X} {:02X}\n", first, second, third);
+        } else {
+            std::cout << std::format("{:08X} {:08X} {:08X}\n", first, second, third);
+        }
     }
 }
 int main(int argc, char *argv[]) {
