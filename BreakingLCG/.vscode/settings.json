@@ -41,7 +41,9 @@
         "editor.insertSpaces": true,
         "editor.tabSize": 4
     },
-    // "editor.formatOnSave": true,
+    "debug.inlineValues": "on",
+    "C_Cpp.debugger.useHexFormatting": true,
+    "lldb.displayFormat": "hex",
     // clang format
     "C_Cpp.formatting": "clangFormat",
     "C_Cpp.clang_format_style": "file",

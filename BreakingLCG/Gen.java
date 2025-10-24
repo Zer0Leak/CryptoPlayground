@@ -18,13 +18,15 @@ public class Gen extends Random {
         final String delimiter = "################################";
         final int N = 6;
         final Integer SEED = 1;
+        final boolean emulateBallyMoneyHoney = false;
+        final int rouletteSlots = 32;
         Gen rng = new Gen();
 
         if (SEED != 0) {
             rng.setSeed(SEED.intValue());
         }
         try {
-            rng.printProperties();
+            // rng.printProperties();
         } catch (Exception e) {
             // e.printStackTrace();
             System.out.println("Run with java --add-opens java.base/java.util=ALL-UNNAMED -cp . Gen");
@@ -32,15 +34,25 @@ public class Gen extends Random {
         System.out.println("Generating " + N + " 48-bit values from Random:");
         System.out.println(delimiter);
         for (int i = 0; i < N; i++) {
-            final long value = rng.nextLong();
-            final long high = value >>> 32;
-            final long low  = value & 0xFFFF_FFFFL;
+            long first;
+            long second;
+            long third;
 
             if (i == N/2) {
                 System.out.println(delimiter);
             }
 
-            System.out.printf("%08X %08X%n", high, low);
+            if (emulateBallyMoneyHoney) {
+                first = Integer.toUnsignedLong(rng.nextInt(rouletteSlots));
+                second  = Integer.toUnsignedLong(rng.nextInt(rouletteSlots));
+                third  = Integer.toUnsignedLong(rng.nextInt(rouletteSlots));
+                System.out.printf("%02X %02X %02X%n", first, second, third);
+            } else {
+                first = Integer.toUnsignedLong(rng.nextInt());
+                second  = Integer.toUnsignedLong(rng.nextInt());
+                third = Integer.toUnsignedLong(rng.nextInt());
+                System.out.printf("%08X %08X %08X%n", first, second, third);
+            }
         }
     }
 }

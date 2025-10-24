@@ -25,11 +25,10 @@ static constexpr uint64_t a = 0x5DEECE66DULL;
 static constexpr uint64_t b = 0xBULL;
 static constexpr uint64_t q = 1ULL << 48;
 static constexpr uint64_t q_mask = q - 1;
-static constexpr uint32_t t = 16;
-static constexpr uint32_t w = (1 << t); // 2^16 = 65536
 
-uint64_t calculateLcgSeedByBruteForce(const std::vector<uint64_t> &values,
-                                      std::function<uint64_t(uint64_t)> transform) {
+static uint64_t calculateLcgSeedByBruteForceT(const std::vector<uint64_t> &values, uint32_t t) {
+    const uint32_t w = (1 << t); // 2^16 = 65536
+
     uint64_t seed = 0;
 
     if (values.size() < 2) {
@@ -41,7 +40,7 @@ uint64_t calculateLcgSeedByBruteForce(const std::vector<uint64_t> &values,
         uint64_t s0_full = s0 << t;
         s0_full |= lower;
         uint64_t s1_full = (a * s0_full + b) & q_mask;
-        uint64_t s1 = transform(s1_full >> t);
+        uint64_t s1 = s1_full >> t;
 
         if (s1 == values[1]) {
             uint64_t si_full = s1_full;
@@ -49,7 +48,7 @@ uint64_t calculateLcgSeedByBruteForce(const std::vector<uint64_t> &values,
             size_t i = 1;
             for (; i < values.size() - 1; ++i) {
                 sj_full = (a * si_full + b) & q_mask;
-                uint64_t sj = transform(sj_full >> t);
+                uint64_t sj = sj_full >> t;
 
                 if (sj != values[i + 1]) {
                     break;
@@ -69,4 +68,16 @@ uint64_t calculateLcgSeedByBruteForce(const std::vector<uint64_t> &values,
 
 Zer0Leak:
     return seed;
+}
+
+static uint64_t calculateLcgSeedByBruteForceBallyMoneyHoney1963(const std::vector<uint64_t> &values) {
+    static constexpr uint32_t t = 43; // 48 - 5 = 43
+
+    return calculateLcgSeedByBruteForceT(values, t);
+}
+
+uint64_t calculateLcgSeedByBruteForce(const std::vector<uint64_t> &values) {
+    static constexpr uint32_t t = 16;
+    return calculateLcgSeedByBruteForceT(values, t);
+    // return calculateLcgSeedByBruteForceBallyMoneyHoney1963(values);
 }

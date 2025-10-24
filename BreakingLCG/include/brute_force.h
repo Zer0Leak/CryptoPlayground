@@ -16,5 +16,4 @@
 #include <functional>
 #include <vector>
 
-extern uint64_t calculateLcgSeedByBruteForce(const std::vector<uint64_t> &values,
-                                             std::function<uint64_t(uint64_t)> transform);
+extern uint64_t calculateLcgSeedByBruteForce(const std::vector<uint64_t> &values);

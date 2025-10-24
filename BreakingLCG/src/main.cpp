@@ -13,6 +13,7 @@
 #include <cstdint>
 #include <format>
 #include <fstream>
+#include <functional>
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
@@ -34,11 +35,12 @@ std::vector<uint64_t> readHexValues(const std::string &filename) {
     // First pass: collect all pairs
     while (std::getline(file, line)) {
         std::istringstream iss(line);
-        std::string first, second;
+        std::string first, second, third;
 
-        if (iss >> first >> second) {
+        if (iss >> first >> second >> third) {
             values.push_back(std::stoull(first, nullptr, 16));
             values.push_back(std::stoull(second, nullptr, 16));
+            values.push_back(std::stoull(third, nullptr, 16));
         }
     }
 
@@ -57,14 +59,15 @@ void testOurLcg() {
     std::cout << delimiter << '\n';
 
     for (int i = 0; i < N; ++i) {
-        std::uint32_t high = static_cast<std::uint32_t>(rng.next48() >> shift);
-        std::uint32_t low = static_cast<std::uint32_t>(rng.next48() >> shift);
+        std::uint32_t first = static_cast<std::uint32_t>(rng.next48() >> shift);
+        std::uint32_t second = static_cast<std::uint32_t>(rng.next48() >> shift);
+        std::uint32_t third = static_cast<std::uint32_t>(rng.next48() >> shift);
 
         if (i == N / 2) {
             std::cout << delimiter << '\n';
         }
 
-        std::cout << std::format("{:08X} {:08X}\n", high, low);
+        std::cout << std::format("{:08X} {:08X} {:08X}\n", first, second, third);
     }
 }
 
@@ -83,9 +86,10 @@ void testWithRecoveredSeed(std::uint64_t internal48Seed) {
     std::cout << "Pairs from recovered seed (EmulateJavaRandom):" << '\n';
     std::cout << delimiter << '\n';
     for (int i = 0; i < N / 2; ++i) {
-        std::uint32_t high = static_cast<std::uint32_t>(rng.next48() >> shift);
-        std::uint32_t low = static_cast<std::uint32_t>(rng.next48() >> shift);
-        std::cout << std::format("{:08X} {:08X}\n", high, low);
+        std::uint32_t first = static_cast<std::uint32_t>(rng.next48() >> shift);
+        std::uint32_t second = static_cast<std::uint32_t>(rng.next48() >> shift);
+        std::uint32_t third = static_cast<std::uint32_t>(rng.next48() >> shift);
+        std::cout << std::format("{:08X} {:08X} {:08X}\n", first, second, third);
     }
 }
 
@@ -94,16 +98,16 @@ void printInputValues(std::vector<uint64_t> &values) {
 
     std::cout << "Input values:" << '\n';
     std::cout << delimiter << '\n';
-    for (size_t i = 0; i < values.size(); i += 2) {
-        std::cout << std::format("{:08X} {:08X}\n", static_cast<uint32_t>(values[i]),
-                                 static_cast<uint32_t>(values[i + 1]));
+    for (size_t i = 0; i < values.size(); i += 3) {
+        std::cout << std::format("{:08X} {:08X} {:08X}\n", static_cast<uint32_t>(values[i]),
+                                 static_cast<uint32_t>(values[i + 1]), static_cast<uint32_t>(values[i + 2]));
     }
 }
 int main(int argc, char *argv[]) {
     // Quick self-check of our Java-compatible LCG
     // testOurLcg();
 
-    std::string file_path = "/mnt/ram/BreakingLCG/lcg.txt";
+    std::string file_path = "/mnt/ram/BreakingLCG/gen.txt";
     if (argc == 2) {
         file_path = argv[1];
     }
@@ -113,7 +117,7 @@ int main(int argc, char *argv[]) {
     // Print two values side-by-side (pair i from first half with i from second half)
     printInputValues(values);
 
-    uint64_t seed = calculateLcgSeedByBruteForce(values, [](uint64_t x) { return x; });
+    uint64_t seed = calculateLcgSeedByBruteForce(values);
     std::cout << std::format("Found internal 48-bit seed: {:012X}\n", seed);
     testWithRecoveredSeed(seed);
 
