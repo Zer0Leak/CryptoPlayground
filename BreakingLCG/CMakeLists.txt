@@ -37,8 +37,22 @@ add_executable(${TARGET_NAME}
 )
 
 target_compile_options(${TARGET_NAME} PRIVATE
-  "$<$<CONFIG:Debug>:-O0;-g3;-fno-omit-frame-pointer>"
+  $<$<CONFIG:Debug>:-O0;-g3;-fno-omit-frame-pointer>
+  $<$<CONFIG:Release>:-O3;-DNDEBUG;-march=native;-mtune=native>
+  $<$<CONFIG:RelWithDebInfo>:-O3;-g;-DNDEBUG;-fno-omit-frame-pointer>
+  $<$<CONFIG:MinSizeRel>:-Os;-DNDEBUG>
 )
+
+# Enable Link Time Optimization (IPO/LTO) for Release when supported
+include(CheckIPOSupported)
+check_ipo_supported(RESULT ipo_supported OUTPUT ipo_error)
+if(ipo_supported)
+  set_property(TARGET ${TARGET_NAME} PROPERTY INTERPROCEDURAL_OPTIMIZATION_RELEASE TRUE)
+  # Also pass explicit -flto for compilers that honor it (GCC/Clang)
+  target_link_options(${TARGET_NAME} PRIVATE $<$<CONFIG:Release>:-flto>)
+else()
+  message(STATUS "IPO/LTO not supported: ${ipo_error}")
+endif()
 
 if(UNIX AND NOT APPLE AND CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
   find_program(MOLD_LINKER mold)

@@ -18,8 +18,8 @@ public class Gen extends Random {
         final String delimiter = "################################";
         final int N = 6;
         final Integer SEED = 1;
-        final boolean emulateBallyMoneyHoney = false;
-        final int rouletteSlots = 32;
+        final boolean emulateBallyMoneyHoney = true;
+        final int numRollCards = 32;
         Gen rng = new Gen();
 
         if (SEED != 0) {
@@ -43,9 +43,9 @@ public class Gen extends Random {
             }
 
             if (emulateBallyMoneyHoney) {
-                first = Integer.toUnsignedLong(rng.nextInt(rouletteSlots));
-                second  = Integer.toUnsignedLong(rng.nextInt(rouletteSlots));
-                third  = Integer.toUnsignedLong(rng.nextInt(rouletteSlots));
+                first = Integer.toUnsignedLong(rng.nextInt(numRollCards));
+                second  = Integer.toUnsignedLong(rng.nextInt(numRollCards));
+                third  = Integer.toUnsignedLong(rng.nextInt(numRollCards));
                 System.out.printf("%02X %02X %02X%n", first, second, third);
             } else {
                 first = Integer.toUnsignedLong(rng.nextInt());
