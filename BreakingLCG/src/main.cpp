@@ -86,9 +86,8 @@ void testOurLcg() {
 
 // Given a recovered internal 48-bit LCG state (as returned by bruteForceSeed),
 // seed EmulateJavaRandom equivalently and print 6 values (2 per line) like Lcg.java
-void testWithRecoveredSeed(std::uint64_t internal48Seed) {
+void testWithRecoveredSeed(std::uint64_t internal48Seed, int rows) {
     const std::string delimiter = "################################";
-    const int N = 6;
     const std::uint64_t shift = 16ULL; // top 32 bits from 48-bit state
 
     // Convert internal state S_internal to a public seed s such that
@@ -98,7 +97,7 @@ void testWithRecoveredSeed(std::uint64_t internal48Seed) {
 
     std::cout << "Pairs from recovered seed (EmulateJavaRandom):" << '\n';
     std::cout << delimiter << '\n';
-    for (int i = 0; i < N / 2; ++i) {
+    for (int i = 0; i < rows; ++i) {
         std::uint32_t first, second, third;
         if (emulateBallyMoneyHoney) {
             first = static_cast<std::uint32_t>(rng.nextInt(numRollCards));
@@ -154,7 +153,7 @@ int main(int argc, char *argv[]) {
 
     uint64_t seed = calculateLcgSeedByBruteForce(values);
     std::cout << std::format("Found internal 48-bit seed: {:012X}\n", seed);
-    testWithRecoveredSeed(seed);
+    testWithRecoveredSeed(seed, values.size() / 3);
 
     return 0;
 }

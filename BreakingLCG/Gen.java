@@ -16,7 +16,7 @@ public class Gen extends Random {
 
     public static void main(String[] args) {
         final String delimiter = "################################";
-        final int N = 6;
+        final int N = 8;
         final Integer SEED = 1;
         final boolean emulateBallyMoneyHoney = true;
         final int numRollCards = 32;
